@@ -1,5 +1,8 @@
 # Neutrino
 
+[![Build Status](https://travis-ci.org/sorentwo/neutrino.png?branch=master)](https://travis-ci.org/sorentwo/neutrino)
+[![Code Climate](https://codeclimate.com/github/sorentwo/neutrino.png)](https://codeclimate.com/github/sorentwo/neutrino)
+
 Neutrino is a ruby uploader library that embraces the spirit of CarrierWave,
 but rejects many of the implementation details and magic. Neutrino's aim is to
 work regardless of framework and with any persistence, storage, or processor.
