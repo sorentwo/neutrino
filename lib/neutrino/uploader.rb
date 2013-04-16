@@ -1,4 +1,4 @@
-require 'neutrino/storage/null'
+require 'neutrino'
 require 'forwardable'
 
 module Neutrino
@@ -7,10 +7,10 @@ module Neutrino
 
     attr_writer :storage
 
-    delegate store!: :storage
+    delegate [:store!, :url] => :storage
 
     def storage
-      @storage ||= Neutrino::Storage::Null.new(self)
+      @storage ||= Neutrino.storage.new(self)
     end
   end
 end

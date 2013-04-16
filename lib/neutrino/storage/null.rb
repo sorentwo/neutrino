@@ -8,6 +8,7 @@ module Neutrino
       end
 
       def store!(new_file); nil; end
+      def url;              nil; end
     end
   end
 end
