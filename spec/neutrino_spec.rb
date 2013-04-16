@@ -4,6 +4,8 @@ describe Neutrino do
   describe '.configure' do
     let(:custom_module) { double(:custom_module) }
 
+    after { reset_configuration! }
+
     it 'overrides the default engines' do
       Neutrino.configure do |config|
         config.persistence = custom_module
@@ -20,6 +22,16 @@ describe Neutrino do
   describe '.storage' do
     it 'defaults to the null storage engine' do
       expect(Neutrino.storage).to be(Neutrino::Storage::Null)
+    end
+  end
+
+  private
+
+  def reset_configuration!
+    Neutrino.configure do |config|
+      config.persistence = nil
+      config.processing  = nil
+      config.storage     = nil
     end
   end
 end
