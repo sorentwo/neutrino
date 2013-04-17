@@ -10,6 +10,14 @@ module Neutrino
       yield self
     end
 
+    def reset!
+      configure do |config|
+        config.persistence = nil
+        config.processing  = nil
+        config.storage     = nil
+      end
+    end
+
     def persistence
       @persistence
     end
