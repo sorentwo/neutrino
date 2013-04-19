@@ -10,3 +10,4 @@ tmp
 bin/*
 TODO
 vendor/*
+.env

@@ -12,5 +12,15 @@ module Neutrino
     def storage
       @storage ||= Neutrino.storage.new(self)
     end
+
+    def store_dir
+    end
+
+    def filename
+    end
+
+    def store_path(for_file = filename)
+      File.join([store_dir, for_file].compact)
+    end
   end
 end
