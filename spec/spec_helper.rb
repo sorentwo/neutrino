@@ -17,5 +17,28 @@ RSpec.configure do |config|
     Neutrino.reset!
   end
 
+  config.before(storage: :null) do
+    require 'neutrino/storage/null'
+
+    Neutrino.configure do |config|
+      config.storage = Neutrino::Storage::Null
+    end
+  end
+
+  config.before(storage: :aws) do
+    require 'neutrino/storage/aws'
+
+    Neutrino.configure do |config|
+      config.storage = Neutrino::Storage::AWS
+
+      config.storage.configure do |storage|
+        storage.acl               = :public_read
+        storage.bucket            = ENV.fetch('AWS_BUCKET_NAME')
+        storage.access_key_id     = ENV.fetch('AWS_ACCESS_KEY_ID')
+        storage.secret_access_key = ENV.fetch('AWS_SECRET_ACCESS_KEY')
+      end
+    end
+  end
+
   source_environment_file!
 end

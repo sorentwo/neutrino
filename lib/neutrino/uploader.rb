@@ -7,7 +7,7 @@ module Neutrino
 
     attr_writer :storage
 
-    delegate [:store!, :url] => :storage
+    delegate [:delete, :exists?, :store, :url] => :storage
 
     def storage
       @storage ||= Neutrino.storage.new(self)

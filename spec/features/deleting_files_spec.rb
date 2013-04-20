@@ -5,22 +5,23 @@ class BasicUploader < Neutrino::Uploader
   def filename;  'text_file.txt'; end
 end
 
-describe 'Storing Files' do
+describe 'Deleting Files' do
   let(:text_file) { File.open('spec/fixtures/text_file.txt', 'r') }
 
   subject(:uploader) { BasicUploader.new }
 
   context 'Using null storage', storage: :null do
-    it 'does not store a file' do
-      expect(uploader.store(text_file)).to be_true
+    it 'does not delete a file' do
+      expect(uploader.delete).to be_nil
     end
   end
 
   context 'Using AWS storage', storage: :aws do
-    it 'uploads the file to the configured s3 bucket' do
-      expect(uploader.store(text_file)).to be_true
+    it 'deletes the file from the stored location' do
+      uploader.store(text_file)
+      uploader.delete
 
-      expect(uploader.url).to eq("https://#{ENV.fetch('AWS_BUCKET_NAME')}.s3.amazonaws.com/uploads/text_file.txt")
+      expect(uploader.exists?).to be_false
     end
   end
 end

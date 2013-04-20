@@ -7,8 +7,9 @@ module Neutrino
         @uploader = uploader
       end
 
-      def store!(new_file); nil; end
-      def url;              nil; end
+      def delete;          nil;  end
+      def store(new_file); true; end
+      def url;             nil;  end
     end
   end
 end

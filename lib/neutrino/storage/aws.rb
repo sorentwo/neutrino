@@ -31,18 +31,26 @@ module Neutrino
         @connection ||= ::AWS::S3.new(credentials)
       end
 
-      def store!(file)
+      def store(file)
         File.new(self, uploader).tap do |aws_file|
           aws_file.store(file)
         end
       end
 
-      def retreive!(identifier)
+      def retreive(identifier)
         File.new(self, uploader)
       end
 
       def url
         File.new(self, uploader).url
+      end
+
+      def delete
+        File.new(self, uploader).delete
+      end
+
+      def exists?
+        File.new(self, uploader).exists?
       end
 
       class File
@@ -51,6 +59,14 @@ module Neutrino
         def initialize(base, uploader)
           @base     = base
           @uploader = uploader
+        end
+
+        def delete
+          file.delete
+        end
+
+        def exists?
+          file.exists?
         end
 
         def store(new_file)
