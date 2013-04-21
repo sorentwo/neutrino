@@ -7,6 +7,13 @@ Neutrino is a ruby uploader library that embraces the spirit of CarrierWave,
 but rejects many of the implementation details and magic. Neutrino's aim is to
 work regardless of framework and with any persistence, storage, or processor.
 
+## Disclaimer
+
+Neutrino is under active development and is by no means stable. Classes and
+methods documented in this README are not necessarily implemented yet. When a
+gem is distributed and/or the version is at least `0.1.0` the gem can be
+considered in beta.
+
 ## Configuration
 
 Neutrino must be configured to handle persistence, storage, or processing.
@@ -154,6 +161,21 @@ gem 'neutrino', '~> 0.1.0'
 ```
 
 ## Contributing
+
+Feature specs are dependent on at least one external service (AWS) and the
+specs won't run unless some environment variables are configured. Please copy
+the `.env.sample` file and fill in real credentials to ensure integration specs
+are working properly.
+
+```bash
+cp .env.sample .env
+```
+
+Travis builds are configured to use secure environment variables so that AWS
+integration specs will operate. Those variables are *not* available for pull
+requests, so all pull requests will fail to pass CI. If and when I get any real
+pull requests I'll implement some feature detection to prevent blanekt CI
+failures.
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
