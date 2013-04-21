@@ -1,6 +1,8 @@
 require 'neutrino'
 
 def source_environment_file!
+  return unless File.exists?('.env')
+
   File.readlines('.env').each do |line|
     values = line.split('=')
     ENV[values.first] = values.last.chomp
