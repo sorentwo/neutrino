@@ -30,7 +30,7 @@ require 'neutrino/storage/aws'
 
 Neutrino.configure do |config|
   config.persistence = Neutrino::Persistence::ActiveModel
-  config.processing  = Neutrino::Processing::Nano
+  config.processor   = Neutrino::Processing::Nano
   config.storage     = Neutrino::Storage::AWS
 
   config.storage.configure do |storage|
