@@ -4,7 +4,7 @@ require 'neutrino/version'
 
 module Neutrino
   class << self
-    attr_writer :persistence, :processing, :storage
+    attr_writer :persistence, :processor, :storage
 
     def configure(&block)
       yield self
@@ -13,7 +13,7 @@ module Neutrino
     def reset!
       configure do |config|
         config.persistence = nil
-        config.processing  = nil
+        config.processor   = nil
         config.storage     = nil
       end
     end
@@ -22,8 +22,8 @@ module Neutrino
       @persistence
     end
 
-    def processing
-      @processing
+    def processor
+      @processor
     end
 
     def storage

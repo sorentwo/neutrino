@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-class BasicUploader < Neutrino::Uploader
+class BasicUploader
+  include Neutrino::Uploader
+
   def store_dir; 'uploads';       end
   def filename;  'text_file.txt'; end
 end

@@ -7,12 +7,12 @@ describe Neutrino do
     it 'overrides the default engines' do
       Neutrino.configure do |config|
         config.persistence = custom_module
-        config.processing  = custom_module
+        config.processor   = custom_module
         config.storage     = custom_module
       end
 
       expect(Neutrino.persistence).to be(custom_module)
-      expect(Neutrino.processing).to be(custom_module)
+      expect(Neutrino.processor).to be(custom_module)
       expect(Neutrino.storage).to be(custom_module)
     end
   end

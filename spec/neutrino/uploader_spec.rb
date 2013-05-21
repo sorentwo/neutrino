@@ -2,7 +2,11 @@ require 'neutrino'
 require 'neutrino/uploader'
 
 describe Neutrino::Uploader do
-  let(:uploader) { Neutrino::Uploader.new }
+  let(:uploader) do
+    Object.new.tap do |object|
+      object.extend(Neutrino::Uploader)
+    end
+  end
 
   describe '#storage' do
     it 'defaults to the null storage engine' do
@@ -16,6 +20,15 @@ describe Neutrino::Uploader do
       uploader.storage = engine
 
       expect(uploader.storage).to eq(engine)
+    end
+  end
+
+  describe '#cache' do
+    it 'holds a reference to the provided file' do
+      file = double(:file)
+
+      uploader.cache(file)
+      expect(uploader.cached).to eq(file)
     end
   end
 end

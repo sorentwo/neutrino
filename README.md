@@ -24,14 +24,11 @@ Neutrino's internal classes.
 ```ruby
 # Note that neutrino does not load any engines without an explicit require, you
 # must include any engine you need for configuration.
-require 'neutrino/persistence/active_model'
-require 'neutrino/processing/nano'
+
 require 'neutrino/storage/aws'
 
 Neutrino.configure do |config|
-  config.persistence = Neutrino::Persistence::ActiveModel
-  config.processor   = Neutrino::Processing::Nano
-  config.storage     = Neutrino::Storage::AWS
+  config.storage = Neutrino::Storage::AWS
 
   config.storage.configure do |storage|
     storage.bucket            = 'bucket.name'
@@ -53,9 +50,9 @@ or any additional methods.
 
 ```ruby
 class User
-  include Neutrino::Mountable
+  include Neutrino::Mixins::Mountable
 
-  mount_uploader AvatarUploader, :avatar
+  mount_uploader :avatar, AvatarUploader
 end
 ```
 
@@ -97,23 +94,28 @@ callbacks like this:
 
 ```ruby
 class User < ActiveRecord::Base
-  before_validation -> |user| { user.avatar_uploader.validate }
-  before_save       -> |user| { user.avatar_uploader.store }
-  after_save        -> |user| { user.avatar_uploader.cleanup }
-  before_destroy    -> |user| { user.avatar_uploader.destroy }
+  before_validation -> user { user.avatar_uploader.validate }
+  before_save       -> user { user.avatar_uploader.store }
+  after_save        -> user { user.avatar_uploader.cleanup }
+  before_destroy    -> user { user.avatar_uploader.destroy }
 end
 ```
 
 ## Processing
 
 More often than not processing refers to image processing, though it can be any
-post upload asset processing. Asset processing is performed by a set of
-`process` directives, each applied in sequence.
+post upload asset processing. Asset processing requires defining a processor
+pipeline, and is performed by a set of `process` directives, each applied in
+sequence.
 
 ```ruby
-class AvatarUploader < Neutrino::Uploader
-  process resize_to_fit: [120, 120]
-  process convert_to:    'jpg'
+class AvatarUploader
+  include Neutrino::Uploader, Neutrino::Processors::Nano
+
+  def process!
+    resize!  '120x120'
+    convert! 'jpg'
+  end
 end
 ```
 
@@ -123,7 +125,9 @@ Defining multiple versions of an asset is simple and modeled directly off of
 CarrierWave's style.
 
 ```ruby
-class AvatarUploader < Neutrino::Uploader
+class AvatarUploader
+  include Neutrino::Uploader
+
   version(:thumb) do |thumb|
     process resize_to_fit: [120, 120]
   end
@@ -133,23 +137,12 @@ end
 ## Testing
 
 Performing asset processing during testing is unnecessary and slow. It is
-recommended that you set the global processor to `Neutrino::Processors::Null`
-in your testing config.
+recommended that you disable global processing in your testing config.
 
 ```ruby
-require 'neutrino/processors/null'
-
 Neutrino.configure do |config|
-  config.processor = Neutrino::Processors::Null
+  config.processing = false
 end
-```
-
-Alternatively you can set the processor for any particular uploader during
-runtime:
-
-```ruby
-uploader = AvatarUploader.new(some_model)
-uploader.processor = Neutrino::Processors::Null
 ```
 
 ## Installation
