@@ -18,12 +18,11 @@ module Neutrino
       end
 
       def store(new_file)
-        file.write(new_file, {
-          acl: self.class.acl,
-          content_type: 'application/octet-stream'
-        })
-
-        new_file.close unless new_file.closed?
+        file.write(
+          acl:          self.class.acl,
+          content_type: 'application/octet-stream',
+          file:         new_file.path
+        )
 
         true
       end
