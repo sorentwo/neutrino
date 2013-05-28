@@ -1,7 +1,6 @@
-require 'fileutils'
 require 'neutrino/processing/nano'
 
-describe Neutrino::Processing::Nano do
+describe Neutrino::Processing::Nano, processing: :image do
   let(:file) { File.open('spec/fixtures/image.png') }
 
   subject(:processor) do
@@ -11,21 +10,7 @@ describe Neutrino::Processing::Nano do
     end
   end
 
-  before do
-    FileUtils.cp('spec/fixtures/image.png', 'spec/fixtures/backup.png')
-  end
-
-  after do
-    FileUtils.mv('spec/fixtures/backup.png', 'spec/fixtures/image.png')
-  end
-
   describe '#convert!' do
-    after do
-      jpeg_path = 'spec/fixtures/image.jpg'
-
-      FileUtils.rm(jpeg_path) if File.exists?(jpeg_path)
-    end
-
     it 'converts the file to the new format' do
       processor.convert!('jpg')
 

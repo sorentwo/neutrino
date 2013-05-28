@@ -13,17 +13,7 @@ class BasicUploader
   end
 end
 
-describe 'Processing Files' do
-  before do
-    FileUtils.cp('spec/fixtures/image.png', 'spec/fixtures/backup.png')
-  end
-
-  after do
-    jpeg_path = 'spec/fixtures/image.jpg'
-    FileUtils.rm(jpeg_path) if File.exists?(jpeg_path)
-    FileUtils.mv('spec/fixtures/backup.png', 'spec/fixtures/image.png')
-  end
-
+describe 'Processing Files', processing: :image do
   it 'applies processing directives to the file before storage' do
     uploader = BasicUploader.new
     image    = File.open('spec/fixtures/image.png')

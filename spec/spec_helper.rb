@@ -1,4 +1,5 @@
 require 'neutrino'
+require 'fileutils'
 
 def source_environment_file!
   return unless File.exists?('.env')
@@ -40,6 +41,17 @@ RSpec.configure do |config|
         storage.secret_access_key = ENV.fetch('AWS_SECRET_ACCESS_KEY')
       end
     end
+  end
+
+  config.before(processing: :image) do
+    FileUtils.cp('spec/fixtures/image.png', 'spec/fixtures/backup.png')
+  end
+
+  config.after(processing: :image) do
+    jpeg_path = 'spec/fixtures/image.jpg'
+
+    FileUtils.rm(jpeg_path) if File.exists?(jpeg_path)
+    FileUtils.mv('spec/fixtures/backup.png', 'spec/fixtures/image.png')
   end
 
   source_environment_file!
