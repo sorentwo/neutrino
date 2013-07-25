@@ -126,10 +126,16 @@ CarrierWave's style.
 
 ```ruby
 class AvatarUploader
-  include Neutrino::Uploader
+  include Neutrino::Uploader, Neutrino::Processors::Nano
+
+  def process!
+    resize!  '100x100'
+    convert! 'jpg'
+  end
 
   version(:thumb) do |thumb|
-    process resize_to_fit: [120, 120]
+    resize!  '100x100'
+    convert! 'jpg'
   end
 end
 ```
