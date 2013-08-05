@@ -1,21 +1,21 @@
 require 'spec_helper'
 require 'neutrino/processing/nano'
 
-class BasicUploader
-  include Neutrino::Uploader, Neutrino::Processing::Nano
-
-  def store_dir; 'uploads';   end
-  def filename;  'image.png'; end
-
-  def process!
-    resize!  '100x100'
-    convert! 'jpg'
-  end
-end
-
 describe 'Processing Files', processing: :image do
-  it 'applies processing directives to the file before storage' do
-    uploader = BasicUploader.new
+  uploader_class = Class.new do
+    include Neutrino::Uploader, Neutrino::Processing::Nano
+
+    def store_dir; 'uploads';   end
+    def filename;  'image.png'; end
+
+    def process!
+      resize!  '100x100'
+      convert! 'jpg'
+    end
+  end
+
+  it 'applies processing directives when process! is called directly' do
+    uploader = uploader_class.new
     image    = File.open('spec/fixtures/image.png')
 
     uploader.cache(image)
@@ -23,4 +23,7 @@ describe 'Processing Files', processing: :image do
 
     expect(File.extname(uploader.cached)).to eq('.jpg')
   end
+
+  it 'applies processing directives before storage'
+  it 'aborts storing when processing fails'
 end
