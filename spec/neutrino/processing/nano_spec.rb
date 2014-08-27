@@ -20,13 +20,13 @@ describe Neutrino::Processing::Nano, processing: :image do
     it 'cleans up the original file' do
       processor.convert!('jpg')
 
-      expect(File.exists?(file.path)).to be_false
+      expect(File.exists?(file.path)).to be_falsey
     end
 
     it 'does not delete the original file if the format has not changed' do
       processor.convert!('png')
 
-      expect(File.exists?(file.path)).to be_true
+      expect(File.exists?(file.path)).to be_truthy
     end
   end
 

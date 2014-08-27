@@ -14,16 +14,17 @@ describe 'Storing Files' do
     it 'does not store a file' do
       uploader = uploader_class.new
 
-      expect(uploader.store(text_file)).to be_true
+      expect(uploader.store(text_file)).to be_truthy
     end
   end
 
   context 'Using AWS storage', storage: :aws do
     it 'uploads the file to the configured s3 bucket' do
-      uploader = uploader_class.new
+      uploader    = uploader_class.new
+      bucket_name = ENV.fetch('AWS_BUCKET_NAME')
 
-      expect(uploader.store(text_file)).to be_true
-      expect(uploader.url).to eq("https://#{ENV.fetch('AWS_BUCKET_NAME')}.s3.amazonaws.com/uploads/text_file.txt")
+      expect(uploader.store(text_file)).to be_truthy
+      expect(uploader.url).to eq("https://#{bucket_name}.s3.amazonaws.com/uploads/text_file.txt")
     end
   end
 end
