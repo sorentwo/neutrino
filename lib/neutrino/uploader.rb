@@ -8,7 +8,29 @@ module Neutrino
     attr_writer :storage
     attr_reader :cached
 
-    delegate [:delete, :exists?, :store, :url] => :storage
+    def self.included(klass)
+      klass.extend(ClassMethods)
+    end
+
+    module ClassMethods
+      def variants
+        @variants ||= {}
+      end
+
+      def variant(name, &block)
+        variants[name] = Class.new(self) do
+          if block_given?
+            define_method :process!, &block
+          end
+        end
+      end
+    end
+
+    delegate [:delete, :exists?, :store, :retreive, :url] => :storage
+
+    def variants
+      self.class.variants
+    end
 
     def storage
       @storage ||= Neutrino.storage.new(self)
@@ -18,6 +40,9 @@ module Neutrino
     end
 
     def filename
+    end
+
+    def process!
     end
 
     def store_path(for_file = filename)

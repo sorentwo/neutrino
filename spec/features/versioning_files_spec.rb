@@ -1,28 +1,29 @@
 require 'spec_helper'
 require 'neutrino/processing/nano'
 
-describe 'Processing Files', processing: :image do
+describe 'Versioning Files' do
   uploader_class = Class.new do
     include Neutrino::Uploader, Neutrino::Processing::Nano
 
     def store_dir; 'uploads';   end
     def filename;  'image.png'; end
 
-    def process!
+    variant(:mini) do
+      resize!  '32x32'
+      convert! 'jpg'
+    end
+
+    variant(:thumb) do
       resize!  '100x100'
       convert! 'jpg'
     end
   end
 
-  it 'applies processing directives when process! is called directly' do
+  it 'stores and processes multiple variants of a file' do
     uploader = uploader_class.new
     image    = File.open('spec/fixtures/image.png')
 
     uploader.cache(image)
-    uploader.process!
-
-    expect(File.extname(uploader.cached)).to eq('.jpg')
+    uploader.processs!
   end
-
-  it 'aborts storing when processing fails'
 end
