@@ -18,7 +18,7 @@ module Neutrino
       end
 
       def store(new_file)
-        file.write(
+        object.write(
           acl:          self.class.acl,
           content_type: 'application/octet-stream',
           file:         new_file.path
@@ -28,15 +28,15 @@ module Neutrino
       end
 
       def delete
-        file.delete
+        object.delete
       end
 
       def exists?
-        file.exists?
+        object.exists?
       end
 
       def url
-        file.public_url.to_s
+        object.public_url.to_s
       end
 
       private
@@ -54,8 +54,8 @@ module Neutrino
           secret_access_key: self.class.secret_access_key }
       end
 
-      def file
-        @file ||= bucket.objects[uploader.store_path]
+      def object
+        @object ||= bucket.objects[uploader.store_path]
       end
     end
   end
