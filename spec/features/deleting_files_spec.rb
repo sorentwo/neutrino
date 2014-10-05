@@ -25,7 +25,7 @@ describe 'Deleting Files' do
       uploader.store(text_file)
       uploader.delete
 
-      expect(uploader.exists?).to be_false
+      expect(uploader.exists?).to be_falsey
     end
   end
 end
