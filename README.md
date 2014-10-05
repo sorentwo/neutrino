@@ -67,7 +67,7 @@ class User
   end
 
   def avatar=(new_avatar)
-    avatar_uploader.stored=(new_avatar)
+    avatar_uploader.stored = new_avatar
   end
 
   def avatar_uploader
@@ -104,7 +104,7 @@ end
 ## Processing
 
 More often than not processing refers to image processing, though it can be any
-post upload asset processing. Asset processing requires defining a processor
+post-upload asset processing. Asset processing requires defining a processor
 pipeline, and is performed by a set of `process` directives, each applied in
 sequence.
 
@@ -173,7 +173,7 @@ cp .env.sample .env
 Travis builds are configured to use secure environment variables so that AWS
 integration specs will operate. Those variables are *not* available for pull
 requests, so all pull requests will fail to pass CI. If and when I get any real
-pull requests I'll implement some feature detection to prevent blanekt CI
+pull requests I'll implement some feature detection to prevent blanket CI
 failures.
 
 1. Fork it
